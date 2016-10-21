@@ -33,8 +33,8 @@ class UploadHandler:
         return self.settings[types] and self.m in self.d[types].keys() and self.extension.lower() in self.d[types][
             self.m].split()
 
-    def file_not_allowed(self, msg="Your File Not Allowed"):
-        response = Response(body=json.dumps({'ERROR': msg}))
+    def file_not_allowed(self, msg="Your File Not Allowed", filename=""):
+        response = Response(body=json.dumps({'ERROR': msg, "filename": filename}))
         response.headers.update({
             'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
         })
@@ -55,7 +55,8 @@ class UploadHandler:
                 return self.file_not_allowed()
             # check file size
             if (file_size / 1048576) > self.settings['MaxUploadSize']:
-                response = Response(body=json.dumps({'ERROR': 'Your File Size Not Allowed'}))
+                response = Response(body=json.dumps({'ERROR': 'Your File Size Not Allowed',
+                                                     "filename": str(f[0][1].filename.encode('utf-8'))}))
                 response.headers.update({
                     'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
                 })
@@ -63,25 +64,29 @@ class UploadHandler:
 
             # file name
             file_name_main = str(f[0][1].filename.encode('utf-8'))
-            if '/' or "\\" or "\"" or "?" or ":" or "<" or ">" "*" or "|" in file_name_main:
-                return self.file_not_allowed(msg="Your File Name Is Not True, Please Change Your File Name")
+            if '/' in file_name_main or "\\" in file_name_main \
+                    or "\"" in file_name_main or "?" in file_name_main or ":" in file_name_main\
+                    or "<" in file_name_main or ">" in file_name_main\
+                    or "*" in file_name_main or "|" in file_name_main:
+                return self.file_not_allowed(msg="Your File Name Is Not True, Please Change Your File Name",
+                                             filename=file_name_main)
 
             # if user does not select file, browser also
             # submit a empty part without filename
             if not file_name_main or '.' not in file_name_main:
-                return self.file_not_allowed()
+                return self.file_not_allowed(filename=file_name_main)
 
             # content type
             content_type = str(f[0][1].type)
 
             # check content_tpe
             if not content_type:
-                return self.file_not_allowed()
+                return self.file_not_allowed(filename=file_name_main)
 
             extension_main = file_name_main.split('.')[-1]
             # check extension
             if not extension_main:
-                return self.file_not_allowed()
+                return self.file_not_allowed(filename=file_name_main)
 
             self.extension = extension_main
             self.mimetype = content_type
@@ -94,13 +99,13 @@ class UploadHandler:
                     Image.open(f[0][1].file)
                 except Exception:
                     # cannot identify image file
-                    return self.file_not_allowed()
+                    return self.file_not_allowed(filename=file_name_main)
             elif self.validate('audio'):
                 pass
             elif self.validate('video'):
                 pass
             else:
-                response = Response(body=json.dumps({'ERROR': 'Your File Not Allowed'}))
+                response = Response(body=json.dumps({'ERROR': 'Your File Not Allowed', 'filename': file_name_main}))
                 response.headers.update({
                     'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
                 })
@@ -114,14 +119,14 @@ class UploadHandler:
                 file_name = self.request.storage.save(f[0][1], extensions='xx')
                 file_name = file_name.split('.')[0]
             except FileNotAllowed:
-                return self.file_not_allowed()
+                return self.file_not_allowed(filename=file_name_main)
 
             # save details in db
             obj_file = SysFile(fileid=file_name, name_main=file_name_main, content_type=content_type, size=file_size,
                                extension=extension_main)
             inserted = obj_file.insert()
             if not inserted:
-                return self.file_not_allowed()
+                return self.file_not_allowed(filename=file_name_main)
 
             response = Response(body=json.dumps({'file_id': file_name}))
             response.headers.update({
