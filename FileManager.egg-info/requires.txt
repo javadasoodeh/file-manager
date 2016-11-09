@@ -1,0 +1,5 @@
+pyramid
+pyramid_storage
+pillow
+peewee
+configparser
