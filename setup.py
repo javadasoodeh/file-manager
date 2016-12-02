@@ -10,4 +10,8 @@ setup(name='FileManager',
       [paste.app_factory]
       main = FileManager:main
       """,
+      author_email='javadasoodeh73@gmail.com',
+      author='Javad Asoodeh',
+      description="This service is uploading",
+      version="0.1.0"
       )

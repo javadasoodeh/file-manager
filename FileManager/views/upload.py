@@ -30,11 +30,11 @@ class UploadHandler:
     def validate(self, types):
         self.d = MimeTypeToExt.extension()
         self.m = self.mimetype.lower()
-        return self.settings[types] and self.m in self.d[types].keys() and self.extension.lower() in self.d[types][
+        return eval(str(self.settings[types])) and self.m in self.d[types].keys() and self.extension.lower() in self.d[types][
             self.m].split()
 
     def file_not_allowed(self, msg="Your File Not Allowed", filename=""):
-        response = Response(body=json.dumps({'ERROR': msg, "filename": filename}))
+        response = Response(body=json.dumps({'ERROR': msg, "filename": filename}), status=501)
         response.headers.update({
             'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
         })
@@ -56,7 +56,7 @@ class UploadHandler:
             # check file size
             if (file_size / 1048576) > self.settings['MaxUploadSize']:
                 response = Response(body=json.dumps({'ERROR': 'Your File Size Not Allowed',
-                                                     "filename": str(f[0][1].filename.encode('utf-8'))}))
+                                                     "filename": str(f[0][1].filename.encode('utf-8'))}), status=501)
                 response.headers.update({
                     'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
                 })
@@ -105,7 +105,7 @@ class UploadHandler:
             elif self.validate('video'):
                 pass
             else:
-                response = Response(body=json.dumps({'ERROR': 'Your File Not Allowed', 'filename': file_name_main}))
+                response = Response(body=json.dumps({'ERROR': 'Your File Not Allowed', 'filename': file_name_main}), status=501)
                 response.headers.update({
                     'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
                 })
