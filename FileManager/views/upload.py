@@ -83,7 +83,9 @@ class UploadHandler:
             if not content_type:
                 return self.file_not_allowed(filename=file_name_main)
 
-            extension_main = file_name_main.split('.')[-1]
+            f_main = file_name_main.split('.')
+            extension_main = f_main[-1]
+            file_name_main = "".join(f_main[:-1])
             # check extension
             if not extension_main:
                 return self.file_not_allowed(filename=file_name_main)

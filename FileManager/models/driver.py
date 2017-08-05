@@ -7,7 +7,10 @@ __author__ = 'j4v4d'
 
 
 class SysFile:
-    def __init__(self, fileid=None, name_main=None, content_type=None, size=None, extension=None):
+    def __init__(self, fileid=None, name_main=None, content_type=None, size=None, extension=None, files=None):
+        if not files:
+            files = []
+        self.files = files
         self.fileid = fileid
         self.name_main = name_main
         self.content_type = content_type
@@ -58,6 +61,20 @@ class SysFile:
             )
         except Exception, e:
             return dict()
+
+    def get_particular_files(self):
+
+        try:
+            selected = File.select().where(File.fileid << self.files)
+            return [dict(
+                fileid=i.fileid,
+                name_main=i.name_main,
+                content_type=i.content_type,
+                size=i.size,
+                extension=i.extension
+            )for i in selected]
+        except Exception, e:
+            return False
 
     def delete(self):
         try:

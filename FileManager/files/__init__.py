@@ -1,3 +1,1 @@
-"""
-    This directory is for uploaded files by user, ....
-"""
+__author__ = 'jvad'

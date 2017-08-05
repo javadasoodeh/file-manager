@@ -25,14 +25,7 @@ class DownloadHandler:
         r = FileResponse(self.request.storage.path(file_id + '.xx'))
         r.content_disposition = 'attachment; filename="{f}.{e}"'.format(f=f['name_main'], e=f['extension'])
         r.content_type = '{c}'.format(c=f['content_type'])
+        r.content_length = int(f['size'])
+        # internet Explorer
+        r.cache_control = 'public'
         return r
-
-    @view_config(route_name='delete', request_method='POST')
-    def delete(self):
-        file_id = self.request.POST['file_id']
-        obj_file = SysFile(fileid=file_id)
-        f = obj_file.delete()
-        if not f:
-            return Response(body=json.dumps({'ERROR': 'Not Found'}))
-        os.remove(self.request.storage.path(file_id + '.xx'))
-        return Response(body=json.dumps({'data': 'deleted success'}))
