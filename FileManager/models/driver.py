@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from FileManager.models.tables import File
+from ..classes.file import FileUtils
 
 __author__ = 'j4v4d'
 
@@ -70,7 +71,7 @@ class SysFile:
                 fileid=i.fileid,
                 name_main=i.name_main,
                 content_type=i.content_type,
-                size=i.size,
+                size=FileUtils.human_readable_byte_counts(i.size, False),
                 extension=i.extension
             )for i in selected]
         except Exception, e:
