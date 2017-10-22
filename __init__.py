@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from pyramid.config import Configurator  # boot
-from FileManager.classes.config import Config
+from classes.config import Config
 
 
 def main(global_config, **settings):
