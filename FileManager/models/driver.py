@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from FileManager.models.tables import File
+from ..models.tables import File
 from ..classes.file import FileUtils
 
 __author__ = 'j4v4d'
