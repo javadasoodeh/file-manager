@@ -5,6 +5,7 @@ class Config:
         self.properties = {}
 
     def urls_(self):
+	print(self.properties_file_path)
         # return dictionary of urls
         try:
             with open(self.properties_file_path) as urlFile:

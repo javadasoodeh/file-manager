@@ -4,7 +4,7 @@ import configparser
 
 # read ini file
 settings = configparser.ConfigParser()
-settings.read("FileManager.ini")
+settings.read("/var/website/WebIFace/WebIFace/quesionBank/config/FileManager.ini")
 db = dict(settings.items('database'))
 
 # database

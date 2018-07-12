@@ -17,6 +17,7 @@ def main(global_config, **settings):
     urls = get_urls.urls_()
 
     for route in urls:
+	print(route)
         config.add_route(route, urls[route])
 
     # scanning views

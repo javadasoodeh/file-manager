@@ -11,7 +11,7 @@ def main(global_config, **settings):
     settings = config.registry.settings
 
     # urls
-    url_location = settings['setting_folder'] + '\\to_srv_urls\\FileManager.properties'
+    url_location = settings['setting_folder'] + '/to_srv_urls/FileManager.properties'
 
     get_urls = Config(properties_file_path=url_location)
     urls = get_urls.urls_()
