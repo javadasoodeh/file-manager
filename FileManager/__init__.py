@@ -1,11 +1,13 @@
 #!/usr/bin/python
 from pyramid.config import Configurator  # boot
 from classes.config import Config
+from models.meta import MyRequest
 
 
 def main(global_config, **settings):
     # create object of configurator
     config = Configurator(settings=settings)
+    config.set_request_factory(MyRequest)
 
     # settings
     settings = config.registry.settings
