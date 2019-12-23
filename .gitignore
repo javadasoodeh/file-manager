@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 *.xx
 *.egg-info
+/FileManager/__init__.py
