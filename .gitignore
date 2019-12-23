@@ -4,3 +4,4 @@ __pycache__
 *.xx
 *.egg-info
 /FileManager/__init__.py
+/FileManager/models/meta.py

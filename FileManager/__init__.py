@@ -11,7 +11,7 @@ __author__ = 'javadasoodeh73@gmail.com'
 
 # read ini file
 settings = configparser.ConfigParser()
-settings.read("D:\\projects\\file-manager\\configs\\config\\FileManager.ini")
+settings.read("C:\\workflow-sys\\file-manager\\configs\\config\\FileManager.ini")
 main_settings = dict(settings.items('app:main'))
 server_settings = dict(settings.items('server:main'))
 
