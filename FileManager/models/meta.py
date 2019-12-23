@@ -4,7 +4,7 @@ import configparser
 
 # read ini file
 settings = configparser.ConfigParser()
-settings.read("D:/projects/settings/config/FileManager.ini")
+settings.read("C:\\workflow-sys\\file-manager\\configs\\config\\FileManager.ini")
 db = dict(settings.items('database'))
 
 # database
