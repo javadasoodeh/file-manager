@@ -5,7 +5,6 @@ class Config:
         self.properties = {}
 
     def urls_(self):
-	print(self.properties_file_path)
         # return dictionary of urls
         try:
             with open(self.properties_file_path) as urlFile:
@@ -15,8 +14,8 @@ class Config:
                         route = route.strip()
                         url = url.strip()
                         self.urls[route] = url
-        except Exception, e:
-            print "FileManager.classes.config.config.urls : " + str(e)
+        except Exception as e:
+            print("FileManager.classes.config.config.urls : " + str(e))
             return {}
         return self.urls
 
@@ -32,7 +31,7 @@ class Config:
                         key = key.strip()
                         value = value.strip()
                         self.properties[key] = value
-        except Exception, e:
-            print "FileManager.classes.config.config.properties : " + str(e)
+        except Exception as e:
+            print("FileManager.classes.config.config.properties : " + str(e))
             return {}
         return self.properties

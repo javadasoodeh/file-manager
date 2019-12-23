@@ -15,7 +15,7 @@ class DeleteHandler:
 
     @view_config(route_name='delete', request_method='POST')
     def delete(self):
-        data = json.loads(self.request.body)
+        data = json.loads(self.request.body.decode())
         file_id = str(data['file_id']).strip()
         obj_file = SysFile(fileid=file_id)
         f = obj_file.delete()

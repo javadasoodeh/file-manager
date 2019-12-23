@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # javadasoodeh73@gmail.com
+
 import json
 import os
 
@@ -23,7 +24,7 @@ class DownloadHandler:
         if not f:
             raise HTTPNotFound
         r = FileResponse(self.request.storage.path(file_id + '.xx'))
-        r.content_disposition = 'attachment; filename="{f}.{e}"'.format(f=f['name_main'].encode('utf-8'), e=f['extension'])
+        r.content_disposition = 'attachment; filename="{f}.{e}"'.format(f=f['name_main'], e=f['extension'])
         r.content_type = '{c}'.format(c=f['content_type'])
         r.content_length = int(f['size'])
         # internet Explorer

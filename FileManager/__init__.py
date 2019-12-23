@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from pyramid.config import Configurator  # boot
-from classes.config import Config
-from models.meta import MyRequest
+from .classes.config import Config
+from .models.meta import MyRequest
 
 
 def main(global_config, **settings):

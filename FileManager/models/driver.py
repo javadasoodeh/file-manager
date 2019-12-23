@@ -46,7 +46,7 @@ class SysFile:
                     )
                 )
             return ls
-        except Exception, e:
+        except Exception as e:
             print(e)
             return []
 
@@ -60,7 +60,7 @@ class SysFile:
                 size=i.size,
                 extension=i.extension
             )
-        except Exception, e:
+        except Exception as e:
             return dict()
 
     def get_particular_files(self):
@@ -73,13 +73,13 @@ class SysFile:
                 content_type=i.content_type,
                 size=FileUtils.human_readable_byte_counts(i.size, False),
                 extension=i.extension
-            )for i in selected]
-        except Exception, e:
+            ) for i in selected]
+        except Exception as e:
             return False
 
     def delete(self):
         try:
             x = File.delete().where(File.fileid == self.fileid).execute()
             return True
-        except Exception, e:
+        except Exception as e:
             return False

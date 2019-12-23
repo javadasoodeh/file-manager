@@ -1,7 +1,8 @@
 from setuptools import setup
 
 requires = [
-    'pyramid', 'pyramid_storage', 'pillow', 'peewee', 'configparser'
+    'pyramid', 'pyramid_storage', 'pillow', 'peewee', 'configparser',
+      'pyMySQL', 'mysql-connector-python', 'pdfkit', 'weasyprint', 'tornado'
 ]
 
 setup(name='FileManager',
@@ -12,6 +13,6 @@ setup(name='FileManager',
       """,
       author_email='javadasoodeh73@gmail.com',
       author='Javad Asoodeh',
-      description="This service is uploading",
-      version="0.1.0"
+      description="File Manager Service",
+      version="1.0.0"
       )

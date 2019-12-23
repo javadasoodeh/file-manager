@@ -30,14 +30,12 @@ class UploadHandler:
     def validate(self, types):
         self.d = MimeTypeToExt.extension()
         self.m = self.mimetype.lower()
-        return eval(str(self.settings[types])) and self.m in self.d[types].keys() and self.extension.lower() in self.d[types][
+        v = eval(self.settings[types]) and self.m in self.d[types].keys() and self.extension.lower() in self.d[types][
             self.m].split()
+        return v
 
     def file_not_allowed(self, msg="Your File Not Allowed", filename=""):
         response = Response(body=json.dumps({'ERROR': msg, "filename": filename}), status=501)
-        response.headers.update({
-            'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
-        })
         return response
 
     @view_config(route_name='upload', request_method='POST', renderer='json')
@@ -49,21 +47,21 @@ class UploadHandler:
 
             # file
             f = self.request.POST.items()
+
             try:
-                file_size = len(f[0][1].value)
+                for i in f:
+                    f = i
+                    break
+                file_size = len(f[1].value)
             except:
                 return self.file_not_allowed()
             # check file size
-            if (file_size / 1048576) > self.settings['MaxUploadSize']:
-                response = Response(body=json.dumps({'ERROR': 'Your File Size Not Allowed',
-                                                     "filename": str(f[0][1].filename.encode('utf-8'))}), status=501)
-                response.headers.update({
-                    'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
-                })
+            if (file_size / 1048576) > int(self.settings['maxuploadsize']):
+                response = Response(body=json.dumps({'ERROR': 'Your File Size Not Allowed', "filename": str(f[1].filename)}), status=501)
                 return response
 
             # file name
-            file_name_main = str(f[0][1].filename.encode('utf-8'))
+            file_name_main = f[1].filename
             if '/' in file_name_main or "\\" in file_name_main \
                     or "\"" in file_name_main or "?" in file_name_main or ":" in file_name_main\
                     or "<" in file_name_main or ">" in file_name_main\
@@ -77,7 +75,7 @@ class UploadHandler:
                 return self.file_not_allowed(filename=file_name_main)
 
             # content type
-            content_type = str(f[0][1].type)
+            content_type = str(f[1].type)
 
             # check content_tpe
             if not content_type:
@@ -98,7 +96,7 @@ class UploadHandler:
                 pass
             elif self.validate('images'):
                 try:
-                    Image.open(f[0][1].file)
+                    Image.open(f[1].file)
                 except Exception:
                     # cannot identify image file
                     return self.file_not_allowed(filename=file_name_main)
@@ -108,17 +106,14 @@ class UploadHandler:
                 pass
             else:
                 response = Response(body=json.dumps({'ERROR': 'Your File Not Allowed', 'filename': file_name_main}), status=501)
-                response.headers.update({
-                    'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
-                })
                 return response
 
             try:
                 # set id for file name
-                f[0][1].filename = str(uuid.uuid4()) + '.xx'
+                f[1].filename = str(uuid.uuid4()) + '.xx'
 
                 # save file
-                file_name = self.request.storage.save(f[0][1], extensions='xx')
+                file_name = self.request.storage.save(f[1], extensions='xx')
                 file_name = file_name.split('.')[0]
             except FileNotAllowed:
                 return self.file_not_allowed(filename=file_name_main)
@@ -130,10 +125,8 @@ class UploadHandler:
             if not inserted:
                 return self.file_not_allowed(filename=file_name_main)
 
-            response = Response(body=json.dumps({'file_id': file_name}))
-            response.headers.update({
-                'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
-            })
+            response = Response(body=json.dumps({'file_id': file_name, 'size': file_size, 'name': file_name}))
+
             return response
         except Exception as e:
             return self.file_not_allowed()
@@ -141,7 +134,4 @@ class UploadHandler:
     @view_config(route_name='upload', request_method='OPTIONS')
     def options(self):
         response = Response()
-        response.headers.update({
-            'Access-Control-Allow-Origin': self.settings['Access-Control-Allow-Origin'],
-        })
         return response
