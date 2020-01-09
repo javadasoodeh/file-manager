@@ -18,7 +18,7 @@ class DownloadHandler:
         self.request = request
         self.settings = self.request.registry.settings
 
-    def generate_pdf(self, url, name, opt=None):
+    def generate_pdf(self, html, name, opt=None):
         if opt is None:
             opt = {}
         config = pdfkit.configuration(wkhtmltopdf=self.settings['wkhtmltopdf_path'])
@@ -34,9 +34,10 @@ class DownloadHandler:
             'cookie': list(self.request.cookies._cache.items())
 
         }
+
         options.update(opt)
-        _path = os.path.join(self.settings['storage.base_path'] + "temp/", name)
-        _status = pdfkit.from_url(url, _path, configuration=config, options=options)
+        _path = os.path.join(self.settings['storage.base_path'], name)
+        _status = pdfkit.from_string(html, _path, configuration=config, options=options)
 
         return _path if _status else ''
 
@@ -55,22 +56,34 @@ class DownloadHandler:
         r.cache_control = 'public'
         return r
 
-    @view_config(route_name='URLToPDF', request_method='GET')
+    @view_config(route_name='URLToPDF', request_method='POST')
     def url_to_pdf(self):
-        url = self.request.params.get('url', None)
-        file_name_main = self.request.params.get('fileName', None)
+        html = self.request.params.get('html', None)
+        file_name_main = 'asdf'
         opt = json.loads(self.request.params.get('opt', '{}'))
         # create a file name by uuid
-        file_name = str(uuid.uuid4()) + '.pdf'
+        file_id = str(uuid.uuid4())
+        file_name = file_id + '.xx'
         # generate a pdf file from url
-        path = self.generate_pdf(url, file_name, opt)
+        path = self.generate_pdf(html, file_name, opt)
         # get file size
         file_size = os.path.getsize(path)
         # pdf content type
         content_type = 'application/pdf'
 
+        # save details in db
+        obj_file = SysFile(fileid=file_id, name_main=file_name_main, content_type=content_type, size=file_size,
+                           extension='pdf')
+        inserted = obj_file.insert()
+        if not inserted:
+            return Response(body='Please Contact to your administrator', status=500)
+
+        response = Response(body=json.dumps({'file_id': file_id, 'size': file_size, 'name': file_name_main}))
+
+        return response
+
         # return file
-        r = FileResponse(path)
+        # r = FileResponse(path)
         # r.content_disposition = 'attachment; filename="{f}.pdf"'.format(f=file_name_main)
         # r.content_type = '{c}'.format(c=content_type)
         # r.content_length = int(file_size)
@@ -81,4 +94,4 @@ class DownloadHandler:
         # if os.path.exists(path):
         #     os.remove(path)
 
-        return r
+        # return r
