@@ -82,6 +82,11 @@ class DownloadHandler:
 
         return response
 
+    @view_config(route_name='URLToPDF', request_method='OPTIONS')
+    def options(self):
+        response = Response()
+        return response
+
         # return file
         # r = FileResponse(path)
         # r.content_disposition = 'attachment; filename="{f}.pdf"'.format(f=file_name_main)
