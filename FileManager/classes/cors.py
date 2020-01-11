@@ -23,8 +23,8 @@ class CorsPreflightPredicate(object):
             return False
         return (
                 request.method == 'OPTIONS' and
-                'Origin' in request.headers and
-                'Access-Control-Request-Method' in request.headers
+                'HTTP_ORIGIN' in request.headers.environ and
+                'HTTP_ACCESS_CONTROL_REQUEST_METHOD' in request.headers.environ
         )
 
 
@@ -43,19 +43,29 @@ def add_cors_preflight_handler(config):
 def add_cors_to_response(event):
     request = event.request
     response = event.response
-    if 'Origin' in request.headers:
-        response.headers['Access-Control-Expose-Headers'] = (
-            'Content-Type,Date,Content-Length,Authorization,X-Request-ID')
-        response.headers['Access-Control-Allow-Origin'] = (
-            request.headers['Origin'])
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
+    if 'HTTP_ORIGIN' in request.headers.environ:
+        response.headers.update({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Expose-Headers': 'Content-Type,Date,Content-Length,Authorization,X-Request-ID',
+            'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Accept-Language, Authorization ,X-Request-ID',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Max-Age': '1728000',
+        })
 
 
 def cors_options_view(context, request):
     response = request.response
-    if 'Access-Control-Request-Headers' in request.headers:
-        response.headers['Access-Control-Allow-Methods'] = (
-            'OPTIONS,HEAD,GET,POST,PUT,DELETE')
-    response.headers['Access-Control-Allow-Headers'] = (
-        'Content-Type,Accept,Accept-Language,Authorization,X-Request-ID')
+    if 'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' in request.headers.environ:
+        response.headers.update({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Expose-Headers': 'Content-Type,Date,Content-Length,Authorization,X-Request-ID',
+            'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Accept-Language, Authorization ,X-Request-ID',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Max-Age': '1728000',
+        })
+    else:
+        response.headers['HTTP_ACCESS_CONTROL_ALLOW_HEADERS'] = (
+            'Origin,Content-Type,Accept,Accept-Language,Authorization,X-Request-ID')
     return response

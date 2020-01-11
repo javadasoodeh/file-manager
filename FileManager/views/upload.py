@@ -131,7 +131,4 @@ class UploadHandler:
         except Exception as e:
             return self.file_not_allowed()
 
-    @view_config(route_name='upload', request_method='OPTIONS')
-    def options(self):
-        response = Response()
-        return response
+

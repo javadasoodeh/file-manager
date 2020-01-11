@@ -23,15 +23,10 @@ class DownloadHandler:
             opt = {}
         config = pdfkit.configuration(wkhtmltopdf=self.settings['wkhtmltopdf_path'])
         options = {
-            'page-size': 'A4',
-            'margin-top': '0',
-            'margin-right': '0',
-            'margin-left': '0',
-            'margin-bottom': '0',
-            'zoom': '1.2',
-            'encoding': "UTF-8",
+
+            'cookie': list(self.request.cookies._cache.items()),
+
             'footer-right': '[page]',
-            'cookie': list(self.request.cookies._cache.items())
 
         }
 
@@ -58,8 +53,8 @@ class DownloadHandler:
 
     @view_config(route_name='URLToPDF', request_method='POST')
     def url_to_pdf(self):
-        html = self.request.params.get('html', None)
-        file_name_main = 'asdf'
+        html = self.request.params.get('html', '')
+        file_name_main = self.request.params.get('fileName', '')
         opt = json.loads(self.request.params.get('opt', '{}'))
         # create a file name by uuid
         file_id = str(uuid.uuid4())
@@ -82,10 +77,6 @@ class DownloadHandler:
 
         return response
 
-    @view_config(route_name='URLToPDF', request_method='OPTIONS')
-    def options(self):
-        response = Response()
-        return response
 
         # return file
         # r = FileResponse(path)
