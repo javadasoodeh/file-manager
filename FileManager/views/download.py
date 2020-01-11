@@ -11,6 +11,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from ..models.driver import SysFile
 import pdfkit
 import uuid
+import tornado.http1connection
 
 
 class DownloadHandler:
