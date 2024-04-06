@@ -16,7 +16,6 @@ class DetailsHandler:
     @view_config(route_name='details', request_method='POST', renderer='json')
     def post(self):
         files = json.loads(self.request.body)['files']
-
         obj_system_file = SysFile(files=files)
         ret = obj_system_file.get_particular_files()
         if ret is False:

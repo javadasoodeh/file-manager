@@ -6,16 +6,17 @@ import configparser
 import tornado.ioloop
 import tornado.wsgi
 from tornado.httpserver import HTTPServer
+from pyramid.paster import setup_logging
+import logging
+
 
 __author__ = 'javadasoodeh73@gmail.com'
 
 # read ini file
 settings = configparser.ConfigParser()
-settings.read("C:\\workflow-sys\\file-manager\\configs\\config\\FileManager.ini")
+settings.read("D:\\projects\\file-manager\\configs\\config\\FileManager.ini")
 main_settings = dict(settings.items('app:main'))
 server_settings = dict(settings.items('server:main'))
-
-
 
 
 def main(**settings):
@@ -24,6 +25,18 @@ def main(**settings):
         # create object of configurator
 
         config.set_request_factory(MyRequest)
+
+        # logging
+        #setup_logging('D:\\projects\\file-manager\\configs\\config\\FileManager.ini')
+        logging.basicConfig(level=logging.DEBUG)
+
+        # cors
+        config.include('FileManager.classes.cors')
+
+        # make sure to add this before other routes to intercept OPTIONS
+        config.add_cors_preflight_handler()
+
+        # config.add_subscriber(my_custom_subscriber, 'pyramid.events.NewResponse')
 
         # settings
         settings = config.registry.settings
@@ -47,14 +60,10 @@ def main(**settings):
 
 
 
-from tornado.autoreload import add_reload_hook, start
-
 if __name__ == '__main__':
     c = tornado.wsgi.WSGIContainer(main(**main_settings))
     http_server = HTTPServer(c)
     http_server.listen(int(server_settings.get('port')))
-    start()
-
     tornado.ioloop.IOLoop.instance().start()
     # server = make_server(server_settings['host'], int(server_settings['port']), main(**main_settings))
     # server.serve_forever()

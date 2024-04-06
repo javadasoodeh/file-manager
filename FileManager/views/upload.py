@@ -94,6 +94,8 @@ class UploadHandler:
             # access to upload documents or .... and check the Mimetype
             if self.validate('documents'):
                 pass
+            elif self.validate('archives'):
+                pass
             elif self.validate('images'):
                 try:
                     Image.open(f[1].file)
