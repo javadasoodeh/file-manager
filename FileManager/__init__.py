@@ -36,6 +36,8 @@ def main(**settings):
         # make sure to add this before other routes to intercept OPTIONS
         config.add_cors_preflight_handler()
 
+
+
         # config.add_subscriber(my_custom_subscriber, 'pyramid.events.NewResponse')
 
         # settings

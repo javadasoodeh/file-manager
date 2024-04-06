@@ -48,7 +48,7 @@ def add_cors_to_response(event):
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Expose-Headers': 'Content-Type,Date,Content-Length,Authorization,X-Request-ID',
         'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Accept-Language, Authorization ,X-Request-ID',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Accept-Language, Authorization ,X-Request-ID, X-CSRFToken',
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Max-Age': '1728000',
     })
@@ -61,7 +61,7 @@ def cors_options_view(context, request):
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Expose-Headers': 'Content-Type,Date,Content-Length,Authorization,X-Request-ID',
         'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Accept-Language, Authorization ,X-Request-ID',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Accept-Language, Authorization ,X-Request-ID, X-CSRFToken',
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Max-Age': '1728000',
     })

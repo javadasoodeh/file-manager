@@ -1,8 +1,8 @@
 # # subscribers.py
 #
-# import logging
-#
-#
+import logging
+
+
 # # calling after controller
 # def callback(request, response):
 #     # # create logger object
@@ -17,7 +17,7 @@
 #             'Access-Control-Allow-Origin': '*',
 #             'Access-Control-Expose-Headers': 'Content-Type,Date,Content-Length,Authorization,X-Request-ID',
 #             'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-#             'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
+#             'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization, X-CSRFToken',
 #             'Access-Control-Allow-Credentials': 'true',
 #             'Access-Control-Max-Age': '1728000',
 #         })
