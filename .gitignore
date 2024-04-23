@@ -1,7 +1,13 @@
 __pycache__
 .idea
+*.sql
+*.xml
 *.pyc
 *.xx
 *.egg-info
 /FileManager/__init__.py
 /FileManager/models/meta.py
+*.ini
+./FileManager/files/*
+./venv
+

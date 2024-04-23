@@ -4,7 +4,7 @@ import configparser
 
 # read ini file
 settings = configparser.ConfigParser()
-settings.read("D:\\projects\\file-manager\\configs\\config\\FileManager.ini")
+settings.read("C:\\Users\\asoodeh.j\\Desktop\\python-projects\\file-manager\\configs\\config\\FileManager.ini")
 db = dict(settings.items('database'))
 
 # database

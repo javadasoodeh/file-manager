@@ -62,10 +62,7 @@ class UploadHandler:
 
             # file name
             file_name_main = f[1].filename
-            if '/' in file_name_main or "\\" in file_name_main \
-                    or "\"" in file_name_main or "?" in file_name_main or ":" in file_name_main\
-                    or "<" in file_name_main or ">" in file_name_main\
-                    or "*" in file_name_main or "|" in file_name_main:
+            if '/' in file_name_main or "\\" in file_name_main or "\"" in file_name_main or "?" in file_name_main or ":" in file_name_main or "<" in file_name_main or ">" in file_name_main or "*" in file_name_main or "|" in file_name_main:
                 return self.file_not_allowed(msg="Your File Name Is Not True, Please Change Your File Name",
                                              filename=file_name_main)
 
