@@ -1,0 +1,11 @@
+# requirements.txt
+pyMySQL
+mysql-connector-python
+pydantic
+fastapi
+uvicorn
+sqlalchemy
+alembic
+python-magic
+pytest
+
